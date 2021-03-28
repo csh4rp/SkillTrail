@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BB78B557-3015-48EE-BD71-AB15E87304AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BE990EB3-5DE7-44F6-9467-86CEBEC4E9C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{98798A7C-9C77-4C74-BDC8-387FABF5F207}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{A2F27C94-BEFA-4D21-8B99-E5F42B6093C0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{98798A7C-9C77-4C74-BDC8-387FABF5F207} = {BB78B557-3015-48EE-BD71-AB15E87304AE}
+		{A2F27C94-BEFA-4D21-8B99-E5F42B6093C0} = {BB78B557-3015-48EE-BD71-AB15E87304AE}
+	EndGlobalSection
+EndGlobal
