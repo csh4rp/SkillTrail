@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{54C63B8C-4364-4A14-8E81-EAD6FE644D62}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FB9D9D44-13E5-4E6E-941E-F4CA5E4ACE4B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{ED4482EE-6B99-4368-894A-8C6332D36D5B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lms", "Lms", "{74AE4240-0657-4CE5-9DD0-3C6E9B739C47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTrail.Modules.Lms.Domain", "src\Modules\Lms\SkillTrail.Modules.Lms.Domain\SkillTrail.Modules.Lms.Domain.csproj", "{6B1664A1-041D-45EC-871D-9DFFBA9D8D7F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{9960AE2B-9F6A-4BF6-8911-E4CF9539B59A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTrail.Shared.Infrastructure", "src\Shared\SkillTrail.Shared.Infrastructure\SkillTrail.Shared.Infrastructure.csproj", "{9B86CECF-7EF8-42BB-B26E-22B48DEC33A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTrail.Shared.Domain.Abstractions", "src\Shared\SkillTrail.Shared.Domain.Abstractions\SkillTrail.Shared.Domain.Abstractions.csproj", "{7FEE6846-5202-4441-B06A-5280359EBB8B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ED4482EE-6B99-4368-894A-8C6332D36D5B} = {54C63B8C-4364-4A14-8E81-EAD6FE644D62}
+		{74AE4240-0657-4CE5-9DD0-3C6E9B739C47} = {ED4482EE-6B99-4368-894A-8C6332D36D5B}
+		{6B1664A1-041D-45EC-871D-9DFFBA9D8D7F} = {74AE4240-0657-4CE5-9DD0-3C6E9B739C47}
+		{9960AE2B-9F6A-4BF6-8911-E4CF9539B59A} = {54C63B8C-4364-4A14-8E81-EAD6FE644D62}
+		{9B86CECF-7EF8-42BB-B26E-22B48DEC33A5} = {9960AE2B-9F6A-4BF6-8911-E4CF9539B59A}
+		{7FEE6846-5202-4441-B06A-5280359EBB8B} = {9960AE2B-9F6A-4BF6-8911-E4CF9539B59A}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B1664A1-041D-45EC-871D-9DFFBA9D8D7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B1664A1-041D-45EC-871D-9DFFBA9D8D7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B1664A1-041D-45EC-871D-9DFFBA9D8D7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B1664A1-041D-45EC-871D-9DFFBA9D8D7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B86CECF-7EF8-42BB-B26E-22B48DEC33A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B86CECF-7EF8-42BB-B26E-22B48DEC33A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B86CECF-7EF8-42BB-B26E-22B48DEC33A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B86CECF-7EF8-42BB-B26E-22B48DEC33A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FEE6846-5202-4441-B06A-5280359EBB8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FEE6846-5202-4441-B06A-5280359EBB8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FEE6846-5202-4441-B06A-5280359EBB8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FEE6846-5202-4441-B06A-5280359EBB8B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
