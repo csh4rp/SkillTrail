@@ -1,4 +1,6 @@
-﻿namespace SkillTrail.Shared.Domain.Abstractions;
+﻿using SkillTrail.Shared.Domain.Abstractions.Events;
+
+namespace SkillTrail.Shared.Domain.Abstractions;
 
 public abstract class AggregateRoot : Entity
 {

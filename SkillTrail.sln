@@ -16,6 +16,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTrail.Shared.Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTrail.Shared.Domain.Abstractions", "src\Shared\SkillTrail.Shared.Domain.Abstractions\SkillTrail.Shared.Domain.Abstractions.csproj", "{7FEE6846-5202-4441-B06A-5280359EBB8B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTrail.Shared.Abstractions", "src\Shared\SkillTrail.Shared.Abstractions\SkillTrail.Shared.Abstractions.csproj", "{03319F4C-58A4-4F07-8183-BEC469FC6435}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTrail.Shared.Application.Abstractions", "src\Shared\SkillTrail.Shared.Application.Abstractions\SkillTrail.Shared.Application.Abstractions.csproj", "{36827B82-1E28-402E-8520-E89F34E5057B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTrail.Shared.Api", "src\Shared\SkillTrail.Shared.Api\SkillTrail.Shared.Api.csproj", "{AF87E3B8-B128-46C4-A617-F7E6A0866216}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{814729DA-72BE-47DA-97BE-078C91939C43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTrail.Tests.Shared.Api", "tests\Shared\SkillTrail.Tests.Shared.Api\SkillTrail.Tests.Shared.Api.csproj", "{885CF583-1E9A-43A2-ADE4-5A7F9764B20A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +38,11 @@ Global
 		{9960AE2B-9F6A-4BF6-8911-E4CF9539B59A} = {54C63B8C-4364-4A14-8E81-EAD6FE644D62}
 		{9B86CECF-7EF8-42BB-B26E-22B48DEC33A5} = {9960AE2B-9F6A-4BF6-8911-E4CF9539B59A}
 		{7FEE6846-5202-4441-B06A-5280359EBB8B} = {9960AE2B-9F6A-4BF6-8911-E4CF9539B59A}
+		{03319F4C-58A4-4F07-8183-BEC469FC6435} = {9960AE2B-9F6A-4BF6-8911-E4CF9539B59A}
+		{36827B82-1E28-402E-8520-E89F34E5057B} = {9960AE2B-9F6A-4BF6-8911-E4CF9539B59A}
+		{AF87E3B8-B128-46C4-A617-F7E6A0866216} = {9960AE2B-9F6A-4BF6-8911-E4CF9539B59A}
+		{814729DA-72BE-47DA-97BE-078C91939C43} = {FB9D9D44-13E5-4E6E-941E-F4CA5E4ACE4B}
+		{885CF583-1E9A-43A2-ADE4-5A7F9764B20A} = {814729DA-72BE-47DA-97BE-078C91939C43}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6B1664A1-041D-45EC-871D-9DFFBA9D8D7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -42,5 +57,21 @@ Global
 		{7FEE6846-5202-4441-B06A-5280359EBB8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FEE6846-5202-4441-B06A-5280359EBB8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FEE6846-5202-4441-B06A-5280359EBB8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03319F4C-58A4-4F07-8183-BEC469FC6435}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03319F4C-58A4-4F07-8183-BEC469FC6435}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03319F4C-58A4-4F07-8183-BEC469FC6435}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03319F4C-58A4-4F07-8183-BEC469FC6435}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36827B82-1E28-402E-8520-E89F34E5057B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36827B82-1E28-402E-8520-E89F34E5057B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36827B82-1E28-402E-8520-E89F34E5057B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36827B82-1E28-402E-8520-E89F34E5057B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF87E3B8-B128-46C4-A617-F7E6A0866216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF87E3B8-B128-46C4-A617-F7E6A0866216}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF87E3B8-B128-46C4-A617-F7E6A0866216}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF87E3B8-B128-46C4-A617-F7E6A0866216}.Release|Any CPU.Build.0 = Release|Any CPU
+		{885CF583-1E9A-43A2-ADE4-5A7F9764B20A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{885CF583-1E9A-43A2-ADE4-5A7F9764B20A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{885CF583-1E9A-43A2-ADE4-5A7F9764B20A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{885CF583-1E9A-43A2-ADE4-5A7F9764B20A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
