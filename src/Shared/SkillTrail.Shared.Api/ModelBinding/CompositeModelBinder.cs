@@ -1,36 +1,33 @@
-﻿using Microsoft.Azure.Functions.Worker.Http;
+﻿namespace SkillTrail.Shared.Api.ModelBinding;
 
-namespace SkillTrail.Shared.Api.ModelBinding;
-
-public class CompositeModelBinder
+internal sealed class CompositeModelBinder : IModelBinder
 {
     private readonly QueryStringModelBinder _queryStringModelBinder = new();
     private readonly JsonModelBinder _jsonModelBinder = new();
-    private readonly IServiceProvider _serviceCollection;
-
-    public CompositeModelBinder(IServiceProvider serviceCollection)
+    private readonly IModelBinderRegistry _modelBinderRegistry;
+    
+    public CompositeModelBinder(IModelBinderRegistry modelBinderRegistry)
     {
-        _serviceCollection = serviceCollection;
+        _modelBinderRegistry = modelBinderRegistry;
     }
 
-    public bool TryBind<T>(HttpRequestData requestData, out T? model)
+    public ModelBindingResult Bind(ModelBindingContext bindingContext)
     {
-        var binder = _serviceCollection.GetService(typeof(IModelBinder<>).MakeGenericType(typeof(T)));
-        if (binder is not null)
+        if (_modelBinderRegistry.TryGetBinder(bindingContext.ModelType, out var binder) && binder is not null)
         {
-            return ((dynamic)binder).TryBind(requestData, out model);
-        }
-        
-        if (requestData.Body.Length > 0 && _jsonModelBinder.TryBind(requestData, out model))
-        {
-            return true;
-        }
-        
-        if ( _queryStringModelBinder.TryBind(requestData, out model))
-        {
-            return true;
+            return binder.Bind(bindingContext);
         }
 
-        return false;
+        if (ShouldTryBindFromBody(bindingContext))
+        {
+            return _jsonModelBinder.Bind(bindingContext);
+        }
+
+        return _queryStringModelBinder.Bind(bindingContext);
     }
+
+    private static bool ShouldTryBindFromBody(ModelBindingContext bindingContext)
+        => bindingContext.BindingDataSource == BindingDataSource.Body || (bindingContext.BindingDataSource is null &&
+                                                                          bindingContext.HttpRequestData.Body.Length > 0);
+    
 }

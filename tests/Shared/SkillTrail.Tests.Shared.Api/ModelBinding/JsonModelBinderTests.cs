@@ -3,7 +3,6 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Xml.Serialization;
-using Microsoft.Azure.Functions.Worker.Http;
 using Shouldly;
 using SkillTrail.Shared.Api.ModelBinding;
 using SkillTrail.Tests.Shared.Api.Fakes;
@@ -17,19 +16,19 @@ public class JsonModelBinderTests
     private readonly JsonModelBinder _modelBinder;
 
     public JsonModelBinderTests()
-    {
-        _modelBinder = new JsonModelBinder();
-    }
-
+        => _modelBinder = new JsonModelBinder();
+    
     [Fact]
     public void Should_BindModel_When_BodyContainsJson()
     {
-        var requestData = new FakeHttpRequestData(new Uri("https://skilltrail.com"), "POST");
+        var requestData = new FakeHttpRequestData(new Uri("https://skilltrail.com/invoke"), "POST");
         requestData.SetBody(JsonStream(), "application/json");
+        var bindingContext = new ModelBindingContext(requestData, typeof(CustomCtorModel), null);
 
-        var (wasBound, model) = Act<DefaultCtorModel>(requestData);
-        
-        wasBound.ShouldBeTrue();
+        var result = Act(bindingContext);
+
+        var model = result.Model as CustomCtorModel;
+        result.IsSuccessful.ShouldBeTrue();
         model.ShouldNotBeNull();
         model.CourseId.ShouldBe(1);
         model.ModuleId.ShouldBe(2);
@@ -40,33 +39,32 @@ public class JsonModelBinderTests
     [Fact]
     public void Should_NotBindModel_When_JsonHeaderIsNotSet()
     {
-        var requestData = new FakeHttpRequestData(new Uri("https://skilltrail.com"), "POST");
+        var requestData = new FakeHttpRequestData(new Uri("https://skilltrail.com/invoke"), "POST");
         requestData.SetBody(XmlStream(), "application/xml");
+        var bindingContext = new ModelBindingContext(requestData, typeof(CustomCtorModel), null);
 
-        var (wasBound, model) = Act<DefaultCtorModel>(requestData);
+        var result= Act(bindingContext);
         
-        wasBound.ShouldBeFalse();
-        model.ShouldBeNull();
+        result.IsSuccessful.ShouldBeFalse();
+        result.Model.ShouldBeNull();
     }
     
     [Fact]
     public void Should_NotBindModel_When_BodyIsEmpty()
     {
-        var requestData = new FakeHttpRequestData(new Uri("https://skilltrail.com"), "POST");
+        var requestData = new FakeHttpRequestData(new Uri("https://skilltrail.com/invoke"), "POST");
         requestData.SetBody(EmptyStream(), "application/json");
+        var bindingContext = new ModelBindingContext(requestData, typeof(CustomCtorModel), null);
 
-        var (wasBound, model) = Act<DefaultCtorModel>(requestData);
+        var result = Act(bindingContext);
         
-        wasBound.ShouldBeFalse();
-        model.ShouldBeNull();
+        result.IsSuccessful.ShouldBeFalse();
+        result.Model.ShouldBeNull();
     }
 
-    private (bool wasBound, T? model) Act<T>(HttpRequestData requestData)
-    {
-        var wasBound = _modelBinder.TryBind<T>(requestData, out var model);
-        return (wasBound, model);
-    }
-
+    private ModelBindingResult Act(ModelBindingContext bindingContext)
+        => _modelBinder.Bind(bindingContext);
+    
     private static Stream JsonStream()
     {
         var model = new DefaultCtorModel

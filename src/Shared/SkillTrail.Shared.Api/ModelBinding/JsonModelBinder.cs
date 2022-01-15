@@ -1,34 +1,31 @@
 ﻿using System.Text.Json;
-using Microsoft.Azure.Functions.Worker.Http;
 
 namespace SkillTrail.Shared.Api.ModelBinding;
 
-public class JsonModelBinder
+internal sealed class JsonModelBinder : IModelBinder
 {
-    public bool TryBind<T>(HttpRequestData requestData, out T? model)
+    public ModelBindingResult Bind(ModelBindingContext bindingContext)
     {
+        var requestData = bindingContext.HttpRequestData;
         if (!requestData.Headers.TryGetValues("ContentType", out var values))
         {
-            model = default;
-            return false;
+            return ModelBindingResult.Unsuccessful();
         }
 
         var isContentJson = values.Any(v => v.Contains("json"));
         if (!isContentJson)
         {
-            model = default;
-            return false;
+            return ModelBindingResult.Unsuccessful();
         }
 
         if (requestData.Body.Length == 0)
         {
-            model = default;
-            return false;
+            return ModelBindingResult.Unsuccessful();
         }
 
         var buffer = new byte[requestData.Body.Length];
         requestData.Body.Read(buffer, 0, buffer.Length);
-        model = JsonSerializer.Deserialize<T>(buffer);
-        return true;
+        var model = JsonSerializer.Deserialize(buffer, bindingContext.ModelType);
+        return ModelBindingResult.Successful(model!);
     }
 }

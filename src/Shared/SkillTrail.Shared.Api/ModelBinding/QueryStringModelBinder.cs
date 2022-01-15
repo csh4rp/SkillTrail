@@ -1,20 +1,18 @@
 ﻿using System.Collections;
-using Microsoft.Azure.Functions.Worker.Http;
 using BindingFlags = System.Reflection.BindingFlags;
 
 namespace SkillTrail.Shared.Api.ModelBinding;
 
-public class QueryStringModelBinder
+internal sealed class QueryStringModelBinder : IModelBinder
 {
-    public bool TryBind<T>(HttpRequestData requestData, out T? model)
+    public ModelBindingResult Bind(ModelBindingContext bindingContext)
     {
-        if (string.IsNullOrEmpty(requestData.Url.Query))
+        if (string.IsNullOrEmpty(bindingContext.HttpRequestData.Url.Query))
         {
-            model = default;
-            return false;
+            return ModelBindingResult.Unsuccessful();
         }
         
-        var query = requestData.Url.Query.Substring(1);
+        var query = bindingContext.HttpRequestData.Url.Query.Substring(1);
         var queryParameters = new Dictionary<string, List<string>>();
         var queryValues = query.Split('&');
         foreach (var queryValue in queryValues)
@@ -31,29 +29,32 @@ public class QueryStringModelBinder
                 valueList.Add(value);
             }
         }
-        
-        if (TryBindUsingDefaultCtor(queryParameters, out T? instance) || TryBindUsingCtorWithParameters(queryParameters, out instance))
+
+        if (TryBindUsingDefaultCtor(bindingContext.ModelType, queryParameters, out var model))
         {
-            model = instance!;
-            return true;
+            return ModelBindingResult.Successful(model!);
         }
 
-        model = default;
-        return false;
+        if (TryBindUsingCtorWithParameters(bindingContext.ModelType, queryParameters, out model))
+        {
+            return ModelBindingResult.Successful(model!);
+        }
+        
+        return ModelBindingResult.Unsuccessful();
     }
 
-    private static bool TryBindUsingDefaultCtor<T>(Dictionary<string, List<string>> parameters, out T? instance)
+    private static bool TryBindUsingDefaultCtor(Type modelType, Dictionary<string, List<string>> parameters, out object? model)
     {
-        var defaultConstructor = typeof(T).GetConstructor(Type.EmptyTypes);
+        var defaultConstructor = modelType.GetConstructor(Type.EmptyTypes);
         if (defaultConstructor is null)
         {
-            instance = default;
+            model = default;
             return false;
         }
 
 
-        instance = (T)defaultConstructor.Invoke(null);
-        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        model = defaultConstructor.Invoke(null);
+        var properties = modelType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
         
         foreach (var propertyInfo in properties)
         {
@@ -74,30 +75,30 @@ public class QueryStringModelBinder
                     var par = castMethod!.MakeGenericMethod(genericArg)
                         .Invoke(null, new object?[] { convertedCollectionValues });
 
-                    propertyInfo.SetValue(instance, par);
+                    propertyInfo.SetValue(model, par);
                 }
                 else
                 {
                     var genericListType = typeof(List<>).MakeGenericType(genericArg);
-                    propertyInfo.SetValue(instance, Activator.CreateInstance(genericListType));
+                    propertyInfo.SetValue(model, Activator.CreateInstance(genericListType));
                 }
             }
             else if (valueExists)
             {
                 var propertyValue = Convert.ChangeType(propertyValues!.FirstOrDefault(), propertyInfo.PropertyType);
-                propertyInfo.SetValue(instance, propertyValue);
+                propertyInfo.SetValue(model, propertyValue);
             }
         }
 
         return true;
     }
 
-    private static bool TryBindUsingCtorWithParameters<T>(Dictionary<string, List<string>> parameters, out T? instance)
+    private static bool TryBindUsingCtorWithParameters(Type modelType, Dictionary<string, List<string>> parameters, out object? model)
     {
-        var constructors = typeof(T).GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+        var constructors = modelType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
         if (!constructors.Any())
         {
-            instance = default;
+            model = default;
             return false;
         }
 
@@ -140,7 +141,7 @@ public class QueryStringModelBinder
             }
         }
 
-        instance = (T)ctor.Invoke(invocationArguments);
+        model = ctor.Invoke(invocationArguments);
         return true;
     }
 }

@@ -1,8 +1,6 @@
-﻿using Microsoft.Azure.Functions.Worker.Http;
+﻿namespace SkillTrail.Shared.Api.ModelBinding;
 
-namespace SkillTrail.Shared.Api.ModelBinding;
-
-public interface IModelBinder<T>
+public interface IModelBinder
 {
-    bool TryBindModel(HttpRequestData httpRequestData, out T? model);
+    ModelBindingResult Bind(ModelBindingContext bindingContext);
 }

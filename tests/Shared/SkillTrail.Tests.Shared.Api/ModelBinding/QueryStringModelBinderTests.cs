@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Azure.Functions.Worker.Http;
-using NSubstitute;
 using Shouldly;
 using SkillTrail.Shared.Api.ModelBinding;
 using SkillTrail.Tests.Shared.Api.Fakes;
@@ -15,33 +13,36 @@ public class QueryStringModelBinderTests
     private readonly QueryStringModelBinder _modelBinder;
 
     public QueryStringModelBinderTests()
-    {
-        _modelBinder = new();
-    }
-
+        => _modelBinder = new();
+    
     [Fact]
     public void Should_BindType_When_TypeHasDefaultCtorAndAllArguments()
     {
         var requestData = new FakeHttpRequestData(new Uri("https://www.api.skilltrail.com/invoke?courseId=1&moduleId=2&userIds=3&userIds=4"), "GET");
+        var bindingContext = new ModelBindingContext(requestData, typeof(DefaultCtorModel), null);
 
-        var (wasBound, model) = Act<DefaultCtorModel>(requestData);
+        var result = Act(bindingContext);
 
-        wasBound.ShouldBeTrue();
+        var model = result.Model as DefaultCtorModel;
+        result.IsSuccessful.ShouldBeTrue();
+        result.Model.ShouldNotBeNull();
         model.ShouldNotBeNull();
         model.CourseId.ShouldBe(1);
         model.ModuleId.ShouldBe(2);
         model.UserIds.ShouldNotBeNull();
-        model.UserIds.ShouldBe(new[]{3, 4});
+        model.UserIds.ShouldBe(new []{3, 4});
     }
     
     [Fact]
     public void Should_BindType_When_TypeHasDefaultCtorAndMissingArguments()
     {
         var requestData = new FakeHttpRequestData(new Uri("https://www.api.skilltrail.com/invoke?courseId=1"), "GET");
+        var bindingContext = new ModelBindingContext(requestData, typeof(DefaultCtorModel), null);
 
-        var (wasBound, model) = Act<DefaultCtorModel>(requestData);
+        var result = Act(bindingContext);
         
-        wasBound.ShouldBeTrue();
+        var model = result.Model as DefaultCtorModel;
+        result.IsSuccessful.ShouldBeTrue();
         model.ShouldNotBeNull();
         model.CourseId.ShouldBe(1);
         model.ModuleId.ShouldBe(0);
@@ -53,10 +54,12 @@ public class QueryStringModelBinderTests
     public void Should_BindType_When_TypeHasCustomCtorAndAllArguments()
     {
         var requestData = new FakeHttpRequestData(new Uri("https://www.api.skilltrail.com/invoke?courseId=1&moduleId=2&userIds=3&userIds=4"), "GET");
+        var bindingContext = new ModelBindingContext(requestData, typeof(CustomCtorModel), null);
 
-        var (wasBound, model) = Act<CustomCtorModel>(requestData);
+        var result = Act(bindingContext);
         
-        wasBound.ShouldBeTrue();
+        var model = result.Model as CustomCtorModel;
+        result.IsSuccessful.ShouldBeTrue();
         model.ShouldNotBeNull();
         model.CourseId.ShouldBe(1);
         model.ModuleId.ShouldBe(2);
@@ -68,10 +71,12 @@ public class QueryStringModelBinderTests
     public void Should_BindType_When_TypeHasCustomCtorAndMissingArguments()
     {
         var requestData = new FakeHttpRequestData(new Uri("https://www.api.skilltrail.com/invoke?courseId=1"), "GET");
+        var bindingContext = new ModelBindingContext(requestData, typeof(CustomCtorModel), null);
 
-        var (wasBound, model) = Act<CustomCtorModel>(requestData);
+        var result = Act(bindingContext);
 
-        wasBound.ShouldBeTrue();
+        var model = result.Model as CustomCtorModel;
+        result.IsSuccessful.ShouldBeTrue();
         model.ShouldNotBeNull();
         model.CourseId.ShouldBe(1);
         model.ModuleId.ShouldBe(0);
@@ -83,16 +88,15 @@ public class QueryStringModelBinderTests
     public void Should_NotBindType_When_TypeHasCustomPrivateCtor()
     {
         var requestData = new FakeHttpRequestData(new Uri("https://www.api.skilltrail.com/invoke?courseId=1"), "GET");
+        var bindingContext = new ModelBindingContext(requestData, typeof(PrivateCtorModel), null);
         
-        var (wasBound, model) = Act<PrivateCtorModel>(requestData);
+        var result = Act(bindingContext);
 
-        wasBound.ShouldBeFalse();
-        model.ShouldBeNull();
+        result.IsSuccessful.ShouldBeFalse();
+        result.Model.ShouldBeNull();
     }
 
-    private (bool wasBound, T? model) Act<T>(HttpRequestData requestData)
-    {
-        var wasBound = _modelBinder.TryBind<T>(requestData, out var model);
-        return (wasBound, model);
-    }
+    private ModelBindingResult Act(ModelBindingContext bindingContext)
+        => _modelBinder.Bind(bindingContext);
+    
 }
