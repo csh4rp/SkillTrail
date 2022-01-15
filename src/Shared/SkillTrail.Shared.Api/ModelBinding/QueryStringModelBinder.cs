@@ -1,13 +1,20 @@
 ﻿using System.Collections;
+using Microsoft.Azure.Functions.Worker.Http;
 using BindingFlags = System.Reflection.BindingFlags;
 
 namespace SkillTrail.Shared.Api.ModelBinding;
 
 public class QueryStringModelBinder
 {
-    public T? Bind<T>(Uri uri)
+    public bool TryBind<T>(HttpRequestData requestData, out T? model)
     {
-        var query = uri.Query.Substring(1);
+        if (string.IsNullOrEmpty(requestData.Url.Query))
+        {
+            model = default;
+            return false;
+        }
+        
+        var query = requestData.Url.Query.Substring(1);
         var queryParameters = new Dictionary<string, List<string>>();
         var queryValues = query.Split('&');
         foreach (var queryValue in queryValues)
@@ -27,10 +34,12 @@ public class QueryStringModelBinder
         
         if (TryBindUsingDefaultCtor(queryParameters, out T? instance) || TryBindUsingCtorWithParameters(queryParameters, out instance))
         {
-            return instance;
+            model = instance!;
+            return true;
         }
 
-        return default;
+        model = default;
+        return false;
     }
 
     private static bool TryBindUsingDefaultCtor<T>(Dictionary<string, List<string>> parameters, out T? instance)
