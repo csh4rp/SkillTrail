@@ -1,20 +1,22 @@
 ﻿namespace SkillTrail.Shared.Api.ModelBinding;
 
-public class ModelBindingResult
+public sealed class ModelBindingResult
 {
-    private static readonly ModelBindingResult UnsuccessfulInstance = new(false, null);
+    private static readonly ModelBindingResult UnsuccessfulInstance = new(null, false);
     
-    public bool IsSuccessful { get; }
-        
-    public object? Model { get; }
-    
-    private ModelBindingResult(bool isSuccessful, object? model)
+    private ModelBindingResult(object? model, bool isSuccessful)
     {
-        IsSuccessful = isSuccessful;
         Model = model;
+        IsSuccessful = isSuccessful;
     }
 
-    public static ModelBindingResult Successful(object model) => new(true, model);
+    public object? Model { get; }
+    
+    public bool IsSuccessful { get; }
+    
+    public static ModelBindingResult Successful(object model) 
+        => new(model, true);
 
     public static ModelBindingResult Unsuccessful() => UnsuccessfulInstance;
+
 }

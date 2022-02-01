@@ -2,5 +2,5 @@
 
 public interface IModelBinderRegistry
 {
-    bool TryGetBinder(Type modelType, out IModelBinder? binder);
+    bool TryGet(Type modelType, out IModelBinder? modelBinder);
 }

@@ -2,5 +2,5 @@
 
 public interface IModelBinder
 {
-    ModelBindingResult Bind(ModelBindingContext bindingContext);
+    ModelBindingResult Bind(ModelBindingContext context);
 }
