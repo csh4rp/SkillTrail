@@ -20,8 +20,4 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\src\Shared\SkillTrail.Shared.Api\SkillTrail.Shared.Api.csproj" />
-    </ItemGroup>
-
 </Project>
